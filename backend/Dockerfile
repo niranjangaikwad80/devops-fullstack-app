@@ -28,5 +28,3 @@ COPY --from=build /app/server .
 EXPOSE 8080
 
 CMD ["./server"]
-
-ubuntu@ip-172-31-28-157:~/devops-fullstack-app/backend$ 
