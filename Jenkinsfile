@@ -10,7 +10,8 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git url: 'https://github.com/niranjangaikwad80/devops-fullstack-app.git'
+                git branch: 'main',
+                url: 'https://github.com/niranjangaikwad80/devops-fullstack-app.git'
             }
         }
 
