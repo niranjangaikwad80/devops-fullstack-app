@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: niranjangaikwad5050/fullstack-backend:4
+          image: niranjangaikwad5050/fullstack-backend:latest
           ports:
             - containerPort: 8080
           env:
