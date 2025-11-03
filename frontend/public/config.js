@@ -1,3 +1,3 @@
 window._env_ = {
-  REACT_APP_SERVER_URL: "http://backend:8080/employees"
+  REACT_APP_SERVER_URL: "/api/employees"
 }
