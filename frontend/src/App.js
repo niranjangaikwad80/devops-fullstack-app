@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import {useEffect, useState} from "react";
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL
+const SERVER_URL = "http://backend:8080/employees";
 
 function App() {
     const [employees, setEmployees] = useState([])
