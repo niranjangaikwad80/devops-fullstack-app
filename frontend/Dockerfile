@@ -17,16 +17,16 @@ RUN npm run build  # Generates /app/build
 # -----------------------------
 FROM nginx:alpine
 
-WORKDIR /usr/share/nginx/html
-
 # Remove default static assets
-RUN rm -rf ./*
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy static build files
-COPY --from=build /app/build .
+# Copy React build
+COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy runtime env script
-COPY public/config.js ./config.js
+# Copy template nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Inject env variables at container startup
-CMD /bin/sh -c "envsubst < config.js > env.js && nginx -g 'daemon off;'"
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+
