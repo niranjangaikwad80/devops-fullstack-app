@@ -17,11 +17,10 @@ import (
 func main() {
 
 	app := fiber.New()
-	app.Use(cors.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: os.Getenv("ALLOWED_ORIGINS"),
-		AllowHeaders: "Origin, Content-Type, Accept",
-	}))
+    AllowOrigins: "*",
+    AllowHeaders: "Origin, Content-Type, Accept",
+}))
 	db := initializeDatabaseConnection()
 	repository.RunMigrations(db)
 	employeeRepository := repository.NewEmployeeRepository(db)
