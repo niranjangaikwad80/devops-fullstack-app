@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: niranjangaikwad5050/fullstack-frontend:3
+          image: niranjangaikwad5050/fullstack-frontend:4
           ports:
             - containerPort: 80
           env:
