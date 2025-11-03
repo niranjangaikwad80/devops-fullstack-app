@@ -49,7 +49,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 sh '''
-                    kubectl apply -f K8s/
+                    kubectl apply -f K8s/ --validate=false
                     kubectl rollout status deployment/backend
                     kubectl rollout status deployment/frontend
                 '''
