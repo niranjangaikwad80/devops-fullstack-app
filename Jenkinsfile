@@ -36,24 +36,28 @@ pipeline {
                 '''
             }
         }
-
-        stage('Update Image version in manifest') {
-            steps {
-                sh '''
-                    sed -i "s|niranjangaikwad5050/fullstack-backend:.*|niranjangaikwad5050/fullstack-backend:${BUILD_NUMBER}|g" K8s/backend.yaml
-                    sed -i "s|niranjangaikwad5050/fullstack-frontend:.*|niranjangaikwad5050/fullstack-frontend:${BUILD_NUMBER}|g" K8s/frontend.yaml
-                '''
-            }
-        }
-
         stage('Deploy to Kubernetes') {
             steps {
-                sh '''
-                    kubectl apply -f K8s/ --validate=false
-                    kubectl rollout status deployment/backend
-                    kubectl rollout status deployment/frontend
-                '''
+                withCredentials([file(credentialsId: 'kind-kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        echo "🔹 Using kubeconfig at: $KUBECONFIG"
+                        export KUBECONFIG=$KUBECONFIG
+        
+                        kubectl config current-context
+                        kubectl get nodes
+        
+                        sed -i "s|niranjangaikwad5050/fullstack-backend:.*|niranjangaikwad5050/fullstack-backend:${BUILD_NUMBER}|g" K8s/backend.yaml
+                        sed -i "s|niranjangaikwad5050/fullstack-frontend:.*|niranjangaikwad5050/fullstack-frontend:${BUILD_NUMBER}|g" K8s/frontend.yaml
+        
+                        kubectl apply -f K8s/ --validate=false
+        
+                        kubectl rollout status deployment/backend
+                        kubectl rollout status deployment/frontend
+                    '''
+                }
             }
         }
+       
+
     }
 }
