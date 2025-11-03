@@ -26,7 +26,7 @@ RUN rm -rf ./*
 COPY --from=build /app/build .
 
 # Copy runtime env script
-COPY public/env-config.js ./env-config.js
+COPY public/config.js ./config.js
 
 # Inject env variables at container startup
-CMD /bin/sh -c "envsubst < env-config.js > env.js && nginx -g 'daemon off;'"
+CMD /bin/sh -c "envsubst < config.js > env.js && nginx -g 'daemon off;'"
