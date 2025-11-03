@@ -1,36 +1,32 @@
-# ----------------------------- 
-# Stage 1: Build the React App 
-# ----------------------------- 
+# -----------------------------
+# Stage 1: Build the React App
+# -----------------------------
+FROM node:18 AS build
 
-FROM node:18 AS build 
+WORKDIR /app
 
-WORKDIR /app 
+COPY package*.json ./
+RUN npm install
 
-COPY package*.json ./ 
+COPY . .
 
-RUN npm install 
+RUN npm run build  # Generates /app/build
 
-COPY . . 
+# -----------------------------
+# Stage 2: Serve using NGINX
+# -----------------------------
+FROM nginx:alpine
 
-ARG REACT_APP_SERVER_URL
-ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
+WORKDIR /usr/share/nginx/html
 
-RUN npm run build # Generates optimized build inside /app/build 
-    
-# ----------------------------- 
-# Stage 2: Run with NGINX 
-# ----------------------------- 
+# Remove default static assets
+RUN rm -rf ./*
 
-FROM nginx:alpine 
+# Copy static build files
+COPY --from=build /app/build .
 
-# Remove default nginx static assets 
-RUN rm -rf /usr/share/nginx/html/* 
+# Copy runtime env script
+COPY public/env-config.js ./env-config.js
 
-# Copy React build artifacts 
-COPY --from=build /app/build /usr/share/nginx/html 
-
-# Expose port 3000 
-EXPOSE 80
-
-# Start nginx 
-CMD ["nginx", "-g", "daemon off;"]
+# Inject env variables at container startup
+CMD /bin/sh -c "envsubst < env-config.js > env.js && nginx -g 'daemon off;'"
