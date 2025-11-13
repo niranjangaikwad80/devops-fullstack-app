@@ -1,6 +1,5 @@
 
 # Stage 1: Build the React App
-
 FROM node:18 AS build
 
 WORKDIR /app
@@ -13,16 +12,12 @@ COPY . .
 RUN npm run build  # Generates /app/build
 
 # Stage 2: Serve using NGINX
-
 FROM nginx:alpine
 
-# Remove default static assets
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy React build
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Copy template nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

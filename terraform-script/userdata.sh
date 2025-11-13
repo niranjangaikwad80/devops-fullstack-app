@@ -46,6 +46,10 @@ nodes:
     extraPortMappings:
       - containerPort: 30000
         hostPort: 30000
+        protocol: TCP
+      - containerPort: 31000
+        hostPort: 31000
+        protocol: TCP
 EOF
 
 sudo -u ubuntu kind create cluster --name devops-cluster --config /home/ubuntu/kind-config.yaml
@@ -61,3 +65,14 @@ sudo chown ubuntu:ubuntu /home/ubuntu/.kube/config
 echo "export KUBECONFIG=/home/ubuntu/.kube/config" >> /home/ubuntu/.bashrc
 
 sudo systemctl restart docker
+
+# Install HELM
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+helm version
+
+
+# Install kube-prometheus-stack
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+kubectl create namespace monitoring
+helm install monitoring prometheus-community/kube-prometheus-stack -n monitoring

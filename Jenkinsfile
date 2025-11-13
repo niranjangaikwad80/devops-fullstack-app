@@ -6,6 +6,7 @@ pipeline {
         FRONTEND_IMAGE = "niranjangaikwad5050/fullstack-frontend"
         BACKEND_IMAGE = "niranjangaikwad5050/fullstack-backend"
     }
+    
 
     stages {
         stage('Clone Repo') {
